@@ -1,0 +1,93 @@
+Di sini saya menggunakan link Json ini https://mul14.github.io/data/employees.json
+
+dan codingnya di sini menggunakan C# 
+Seperti berikut:
+
+using System;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Nomor2
+{
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            //memanggil nilai atau value GetPosts di dalam class Coba disimpan di dalam variabel result
+            var result = await Coba.GetPosts();
+            
+            //Print nilai atau value dari GetPosts
+            Console.WriteLine(result);
+        }
+    }
+    public static class Coba {
+        //async untuk supaya bisa melakukan task secara paralel atau bersamaan
+        public static async Task <string> GetPosts()
+        {
+            //untuk melakukan request terhadap website atau internet
+            var web = new HttpClient();
+            
+            //untuk bisa mengambil nilai string dari URL JSon di atas
+            var hasil = await web.GetStringAsync("https://mul14.github.io/data/employees.json");
+            
+            //Json perlu dikonversi menjaid objek untuk keperluan CRUD jika diperlukan
+            var myDetails = JsonConvert.DeserializeObject<List<MyDetail>>(hasil);
+            
+            //melakukan loops untuk bisa mencari value atau nilai yang dibutuhkan
+            List<string> y = new List<string>();
+            foreach (var item in myDetails) {
+                //mencari nilai salary atau gaji yang lebih besar dari 15.000.000 rupiah
+                if (item.salary > 15000000)
+                {
+                    y.Add(item.first_name);
+                }
+            }
+            //return myDetails;
+            return String.Join(',',y);
+        }
+        //melakukan inisialisasi untuk memanggil nilai" dari JSON kalian bisa menggunakan http://json2csharp.com/ untuk memudahkan pemanggilanJSON di code C#
+            public class Address
+            {
+                public string label { get; set; }
+                public string address { get; set; }
+                public string city { get; set; }
+            }
+
+            public class Phone
+            {
+                public string label { get; set; }
+                public string phone { get; set; }
+            }
+
+            public class Department
+            {
+                public string name { get; set; }
+            }
+
+            public class Position
+            {
+                public string name { get; set; }
+            }
+
+            public class MyDetail
+            {
+                public int id { get; set; }
+                public string avatar_url { get; set; }
+                public string employee_id { get; set; }
+                public string first_name { get; set; }
+                public string last_name { get; set; }
+                public string email { get; set; }
+                public string username { get; set; }
+                public string birthday { get; set; }
+                public List<Address> addresses { get; set; }
+                public List<Phone> phones { get; set; }
+                public List<string> presence_list { get; set; }
+                public int salary { get; set; }
+                public Department department { get; set; }
+                public Position position { get; set; }
+            }
+        
+    }
+}
